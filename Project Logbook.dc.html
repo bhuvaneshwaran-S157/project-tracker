@@ -1,0 +1,869 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@500;600;700&display=swap" rel="stylesheet">
+  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='32' y2='32'%3E%3Cstop stop-color='%236C63FF'/%3E%3Cstop offset='1' stop-color='%2300C2FF'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='32' height='32' rx='7' fill='url(%23g)'/%3E%3Cpath d='M11 11l-4 5 4 5M21 11l4 5-4 5' stroke='white' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round' fill='none'/%3E%3Cpath d='M13.5 17.5l2 2.2 4.5-6.4' stroke='white' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round' fill='none'/%3E%3C/svg%3E">
+  <link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='32' y2='32'%3E%3Cstop stop-color='%236C63FF'/%3E%3Cstop offset='1' stop-color='%2300C2FF'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='32' height='32' rx='7' fill='url(%23g)'/%3E%3Cpath d='M11 11l-4 5 4 5M21 11l4 5-4 5' stroke='white' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round' fill='none'/%3E%3Cpath d='M13.5 17.5l2 2.2 4.5-6.4' stroke='white' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round' fill='none'/%3E%3C/svg%3E">
+  <link rel="manifest" href="manifest.json">
+  <style>
+    @keyframes fadeInUp { from { opacity:0; transform:translateY(14px); } to { opacity:1; transform:translateY(0); } }
+    @keyframes spinSlow { from { transform:rotate(0deg); } to { transform:rotate(360deg); } }
+    @keyframes pulseGlow { 0%,100% { opacity:0.55; } 50% { opacity:1; } }
+    @keyframes confettiFall { 0% { transform:translateY(-10vh) rotate(0deg); opacity:1; } 100% { transform:translateY(105vh) rotate(540deg); opacity:0; } }
+    @keyframes floatBlob { 0%,100% { transform:translate(0,0); } 50% { transform:translate(20px,-30px); } }
+    * { box-sizing:border-box; }
+    body { margin:0; -webkit-font-smoothing:antialiased; }
+    ::selection { background:#6C63FF; color:#fff; }
+    input::placeholder, textarea::placeholder { color:inherit; opacity:0.4; }
+    @media (prefers-reduced-motion: reduce) { *{ animation-duration:0.01ms !important; animation-iteration-count:1 !important; transition-duration:0.01ms !important; } }
+  </style>
+</helmet>
+<div style="min-height:100vh;position:relative;overflow-x:hidden;font-family:'Inter',sans-serif;background:{{ T.bg }};color:{{ T.textPrimary }};transition:background 0.4s ease,color 0.4s ease">
+
+  <sc-if value="{{ loaderVisible }}" hint-placeholder-val="{{ true }}">
+    <div style="position:fixed;inset:0;z-index:500;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:18px;background:{{ T.bg }};opacity:{{ loaderOpacity }};transition:opacity 0.35s ease">
+      <div style="width:56px;height:56px;border-radius:16px;background:{{ T.gradient }};display:flex;align-items:center;justify-content:center;animation:pulseGlow 1.4s ease-in-out infinite">
+        <i data-lucide="terminal-square" style="width:28px;height:28px;color:#fff"></i>
+      </div>
+      <div style="font-family:'Poppins',sans-serif;font-weight:600;font-size:18px;letter-spacing:0.02em">Project Logbook</div>
+      <div style="width:140px;height:3px;border-radius:2px;background:{{ T.cardBorder }};overflow:hidden">
+        <div style="width:60%;height:100%;background:{{ T.gradient }};animation:spinSlow 0.9s linear infinite;border-radius:2px"></div>
+      </div>
+    </div>
+  </sc-if>
+
+  <div style="position:absolute;top:-120px;left:-100px;width:420px;height:420px;border-radius:50%;background:{{ T.accent }};opacity:0.16;filter:blur(90px);animation:floatBlob 12s ease-in-out infinite;pointer-events:none"></div>
+  <div style="position:absolute;top:280px;right:-140px;width:460px;height:460px;border-radius:50%;background:{{ T.secondary }};opacity:0.14;filter:blur(100px);animation:floatBlob 14s ease-in-out infinite reverse;pointer-events:none"></div>
+
+  <nav aria-label="Main navigation" style="position:sticky;top:0;z-index:50;display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;padding:14px 32px;background:{{ T.navBg }};backdrop-filter:blur(20px) saturate(160%);border-bottom:1px solid {{ T.cardBorder }}">
+    <div style="display:flex;align-items:center;gap:10px">
+      <div style="width:36px;height:36px;border-radius:11px;background:{{ T.gradient }};display:flex;align-items:center;justify-content:center;flex-shrink:0">
+        <i data-lucide="terminal-square" style="width:20px;height:20px;color:#fff"></i>
+      </div>
+      <span style="font-family:'Poppins',sans-serif;font-weight:600;font-size:17px;white-space:nowrap;flex-shrink:0">Project Logbook</span>
+    </div>
+    <div style="display:flex;align-items:center;gap:14px">
+      <span style="font-size:13px;color:{{ T.textSecondary }};white-space:nowrap">{{ todayLabel }}</span>
+      <button aria-label="Toggle theme" onclick="{{ toggleTheme }}" style="width:36px;height:36px;border-radius:10px;border:1px solid {{ T.cardBorder }};background:{{ T.cardBg }};display:flex;align-items:center;justify-content:center;cursor:pointer;color:{{ T.textPrimary }}" style-hover="background:{{ T.cardBgHover }}">
+        <i data-lucide="{{ themeIcon }}" style="width:17px;height:17px"></i>
+      </button>
+    </div>
+  </nav>
+
+  <div style="max-width:1240px;margin:0 auto;padding:0 32px 120px;position:relative;z-index:1">
+
+    <section style="padding:48px 0 28px;animation:fadeInUp 0.5s ease both">
+      <div style="font-size:12px;font-weight:600;letter-spacing:0.12em;color:{{ T.accentText }};text-transform:uppercase;margin-bottom:10px">{{ greeting }}</div>
+      <h1 style="font-family:'Poppins',sans-serif;font-size:clamp(28px,4vw,44px);font-weight:700;line-height:1.1;margin:0 0 12px;background:{{ T.gradient }};-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent">Build Something Every Day.</h1>
+      <p style="font-size:15px;color:{{ T.textSecondary }};max-width:560px;margin:0 0 22px;font-style:italic">"{{ quote }}"</p>
+      <div style="display:flex;gap:12px;flex-wrap:wrap;align-items:center">
+        <button onclick="{{ openNewLog }}" style="display:flex;align-items:center;gap:8px;padding:12px 22px;border-radius:12px;border:none;background:{{ T.gradient }};color:#fff;font-weight:600;font-size:14px;cursor:pointer;box-shadow:0 8px 24px rgba(108,99,255,0.35)" style-hover="transform:translateY(-2px);box-shadow:0 12px 32px rgba(108,99,255,0.45)">
+          <i data-lucide="plus" style="width:16px;height:16px"></i> Add Today's Log
+        </button>
+        <sc-if value="{{ hasStreak }}">
+          <div style="display:flex;align-items:center;gap:8px;padding:10px 16px;border-radius:12px;background:{{ T.cardBg }};border:1px solid {{ T.cardBorder }}">
+            <i data-lucide="flame" style="width:16px;height:16px;color:{{ T.warning }}"></i>
+            <span style="font-size:13px;font-weight:600">{{ stats.streak }} day streak</span>
+          </div>
+        </sc-if>
+      </div>
+    </section>
+
+    <section style="display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:14px;margin-bottom:40px">
+      <sc-for list="{{ statCards }}" as="card" hint-placeholder-count="5">
+        <div style="padding:18px;border-radius:16px;background:{{ T.cardBg }};border:1px solid {{ T.cardBorder }};backdrop-filter:blur(20px);transition:transform 0.25s ease,box-shadow 0.25s ease" style-hover="transform:translateY(-4px);box-shadow:0 12px 28px rgba(0,0,0,0.18)">
+          <div style="width:34px;height:34px;border-radius:9px;background:{{ card.tint }};display:flex;align-items:center;justify-content:center;margin-bottom:12px">
+            <i data-lucide="{{ card.icon }}" style="width:17px;height:17px;color:{{ card.iconColor }}"></i>
+          </div>
+          <div style="font-family:'Poppins',sans-serif;font-size:26px;font-weight:700;line-height:1">{{ card.value }}</div>
+          <div style="font-size:12.5px;color:{{ T.textSecondary }};margin-top:6px">{{ card.label }}</div>
+        </div>
+      </sc-for>
+    </section>
+
+    <section style="padding:26px;border-radius:20px;background:{{ T.cardBg }};border:1px solid {{ T.cardBorder }};backdrop-filter:blur(20px);display:flex;align-items:center;justify-content:space-between;gap:20px;flex-wrap:wrap;margin-bottom:40px">
+      <div style="display:flex;align-items:center;gap:16px">
+        <div style="width:46px;height:46px;border-radius:13px;background:{{ T.gradient }};display:flex;align-items:center;justify-content:center;flex-shrink:0">
+          <i data-lucide="notebook-pen" style="width:22px;height:22px;color:#fff"></i>
+        </div>
+        <div>
+          <div style="font-family:'Poppins',sans-serif;font-weight:600;font-size:17px">Daily Progress Logger</div>
+          <div style="font-size:13px;color:{{ T.textSecondary }};margin-top:2px">Capture today's goal, wins, blockers and hours in under a minute.</div>
+        </div>
+      </div>
+      <button onclick="{{ openNewLog }}" style="padding:11px 20px;border-radius:11px;border:1px solid {{ T.cardBorder }};background:transparent;color:{{ T.textPrimary }};font-weight:600;font-size:13.5px;cursor:pointer;white-space:nowrap" style-hover="background:{{ T.cardBgHover }}">New Log</button>
+    </section>
+
+    <section style="margin-bottom:20px">
+      <div style="display:flex;gap:12px;flex-wrap:wrap;align-items:center;justify-content:space-between;margin-bottom:16px">
+        <div style="position:relative;flex:1;min-width:220px;max-width:340px">
+          <i data-lucide="search" style="width:15px;height:15px;position:absolute;left:13px;top:50%;transform:translateY(-50%);color:{{ T.textSecondary }}"></i>
+          <input value="{{ search }}" oninput="{{ setSearch }}" aria-label="Search logs and projects" placeholder="Search logs, projects, tech..." style="width:100%;padding:10px 12px 10px 36px;border-radius:11px;border:1px solid {{ T.cardBorder }};background:{{ T.inputBg }};color:{{ T.textPrimary }};font-size:13.5px;font-family:inherit"/>
+        </div>
+        <select value="{{ categoryFilter }}" onchange="{{ setCategoryFilter }}" aria-label="Filter by category" style="padding:10px 12px;border-radius:11px;border:1px solid {{ T.cardBorder }};background:{{ T.inputBg }};color:{{ T.textPrimary }};font-size:13px;font-family:inherit">
+          <option value="All">All Categories</option>
+          <sc-for list="{{ categories }}" as="cat">
+            <option value="{{ cat }}">{{ cat }}</option>
+          </sc-for>
+        </select>
+      </div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap">
+        <sc-for list="{{ filterChips }}" as="chip" hint-placeholder-count="6">
+          <button onclick="{{ chip.onClick }}" style="padding:8px 15px;border-radius:999px;font-size:12.5px;font-weight:600;cursor:pointer;border:1px solid {{ chip.border }};background:{{ chip.bg }};color:{{ chip.color }}">{{ chip.label }}</button>
+        </sc-for>
+      </div>
+    </section>
+
+    <section style="margin-bottom:48px" ref="{{ timelineRef }}">
+      <h2 style="font-family:'Poppins',sans-serif;font-size:20px;font-weight:600;margin:0 0 18px">Progress Timeline</h2>
+      <sc-if value="{{ hasNoLogs }}">
+        <div style="padding:48px 24px;border-radius:18px;border:1px dashed {{ T.cardBorder }};text-align:center;color:{{ T.textSecondary }}">
+          <i data-lucide="calendar-clock" style="width:30px;height:30px;margin-bottom:12px;opacity:0.6"></i>
+          <div style="font-size:14.5px;font-weight:500;color:{{ T.textPrimary }}">No logs yet</div>
+          <div style="font-size:13px;margin-top:4px">Your daily progress will show up here as a timeline once you add your first log.</div>
+        </div>
+      </sc-if>
+      <sc-if value="{{ hasLogsButFiltered }}">
+        <div style="padding:32px;border-radius:18px;border:1px dashed {{ T.cardBorder }};text-align:center;color:{{ T.textSecondary }};font-size:13.5px">No logs match your search or filters.</div>
+      </sc-if>
+      <div style="display:flex;flex-direction:column;gap:0">
+        <sc-for list="{{ displayLogs }}" as="log" hint-placeholder-count="0">
+          <div style="display:flex;gap:16px;animation:fadeInUp 0.4s ease both">
+            <div style="display:flex;flex-direction:column;align-items:center;flex-shrink:0;width:14px;padding-top:22px">
+              <div style="width:11px;height:11px;border-radius:50%;background:{{ log.categoryColor }};box-shadow:0 0 0 4px {{ log.categoryGlow }};flex-shrink:0"></div>
+              <div style="width:2px;flex:1;background:{{ T.cardBorder }};margin-top:4px"></div>
+            </div>
+            <div style="flex:1;padding:18px 20px;border-radius:16px;background:{{ T.cardBg }};border:1px solid {{ T.cardBorder }};backdrop-filter:blur(20px);margin-bottom:16px;transition:box-shadow 0.2s ease" style-hover="box-shadow:0 8px 24px rgba(0,0,0,0.15)">
+              <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;cursor:pointer" onclick="{{ log.toggle }}">
+                <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">
+                  <span style="font-size:12px;font-weight:600;color:{{ T.textSecondary }}">{{ log.dateLabel }}</span>
+                  <span style="font-size:13.5px;font-weight:600">{{ log.project }}</span>
+                  <span style="font-size:11px;font-weight:600;padding:3px 9px;border-radius:999px;background:{{ log.categoryGlow }};color:{{ log.categoryColor }}">{{ log.category }}</span>
+                </div>
+                <div style="display:flex;align-items:center;gap:10px">
+                  <span style="font-size:12px;color:{{ T.textSecondary }}">{{ log.hours }}h · {{ log.mood }}</span>
+                  <i data-lucide="{{ log.chevron }}" style="width:16px;height:16px;color:{{ T.textSecondary }}"></i>
+                </div>
+              </div>
+              <div style="margin-top:10px;height:6px;border-radius:3px;background:{{ T.cardBorder }};overflow:hidden">
+                <div style="height:100%;width:{{ log.progressPct }};background:{{ T.gradient }};border-radius:3px;transition:width 0.6s ease"></div>
+              </div>
+              <sc-if value="{{ log.expanded }}">
+                <div style="margin-top:16px;display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px;font-size:13px;color:{{ T.textSecondary }}">
+                  <div><div style="font-weight:600;color:{{ T.textPrimary }};margin-bottom:3px">Today's Goal</div>{{ log.goal }}</div>
+                  <div><div style="font-weight:600;color:{{ T.textPrimary }};margin-bottom:3px">Completed</div>{{ log.completed }}</div>
+                  <div><div style="font-weight:600;color:{{ T.textPrimary }};margin-bottom:3px">Problems Faced</div>{{ log.problems }}</div>
+                  <div><div style="font-weight:600;color:{{ T.textPrimary }};margin-bottom:3px">Solution</div>{{ log.solution }}</div>
+                  <div><div style="font-weight:600;color:{{ T.textPrimary }};margin-bottom:3px">Tomorrow's Plan</div>{{ log.tomorrowPlan }}</div>
+                  <div><div style="font-weight:600;color:{{ T.textPrimary }};margin-bottom:3px">Priority</div><span style="color:{{ log.priorityColor }};font-weight:600">{{ log.priority }}</span></div>
+                </div>
+                <div style="display:flex;gap:8px;margin-top:16px">
+                  <button onclick="{{ log.edit }}" style="display:flex;align-items:center;gap:6px;padding:8px 14px;border-radius:9px;border:1px solid {{ T.cardBorder }};background:transparent;color:{{ T.textPrimary }};font-size:12.5px;font-weight:600;cursor:pointer" style-hover="background:{{ T.cardBgHover }}"><i data-lucide="pencil" style="width:13px;height:13px"></i>Edit</button>
+                  <button onclick="{{ log.remove }}" style="display:flex;align-items:center;gap:6px;padding:8px 14px;border-radius:9px;border:1px solid rgba(239,68,68,0.3);background:rgba(239,68,68,0.08);color:{{ T.danger }};font-size:12.5px;font-weight:600;cursor:pointer"><i data-lucide="trash-2" style="width:13px;height:13px"></i>Delete</button>
+                </div>
+              </sc-if>
+            </div>
+          </div>
+        </sc-for>
+      </div>
+    </section>
+
+    <section style="margin-bottom:48px">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:18px;flex-wrap:wrap;gap:10px">
+        <h2 style="font-family:'Poppins',sans-serif;font-size:20px;font-weight:600;margin:0">Project Dashboard</h2>
+        <button onclick="{{ openNewProject }}" style="display:flex;align-items:center;gap:6px;padding:9px 16px;border-radius:10px;border:1px solid {{ T.cardBorder }};background:transparent;color:{{ T.textPrimary }};font-size:13px;font-weight:600;cursor:pointer" style-hover="background:{{ T.cardBgHover }}"><i data-lucide="plus" style="width:14px;height:14px"></i>New Project</button>
+      </div>
+      <sc-if value="{{ hasNoProjects }}">
+        <div style="padding:48px 24px;border-radius:18px;border:1px dashed {{ T.cardBorder }};text-align:center;color:{{ T.textSecondary }}">
+          <i data-lucide="folder" style="width:30px;height:30px;margin-bottom:12px;opacity:0.6"></i>
+          <div style="font-size:14.5px;font-weight:500;color:{{ T.textPrimary }}">No projects yet</div>
+          <div style="font-size:13px;margin-top:4px">Add your first project to start tracking progress and deadlines.</div>
+        </div>
+      </sc-if>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px">
+        <sc-for list="{{ displayProjects }}" as="proj" hint-placeholder-count="0">
+          <div style="padding:22px;border-radius:18px;background:{{ T.cardBg }};border:1px solid {{ T.cardBorder }};backdrop-filter:blur(20px);transition:transform 0.25s ease" style-hover="transform:translateY(-4px)">
+            <div style="display:flex;justify-content:space-between;gap:12px">
+              <div>
+                <div style="font-family:'Poppins',sans-serif;font-weight:600;font-size:15.5px;margin-bottom:6px">{{ proj.name }}</div>
+                <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px">
+                  <sc-for list="{{ proj.techs }}" as="tech">
+                    <span style="font-size:10.5px;font-weight:600;padding:3px 8px;border-radius:6px;background:{{ T.cardBorder }};color:{{ T.textSecondary }}">{{ tech }}</span>
+                  </sc-for>
+                </div>
+              </div>
+              <svg width="58" height="58" viewBox="0 0 58 58" style="flex-shrink:0">
+                <circle cx="29" cy="29" r="24" fill="none" stroke="{{ T.cardBorder }}" stroke-width="5"></circle>
+                <circle cx="29" cy="29" r="24" fill="none" stroke="{{ proj.ringColor }}" stroke-width="5" stroke-linecap="round" stroke-dasharray="150.8" stroke-dashoffset="{{ proj.dashOffset }}" transform="rotate(-90 29 29)" style="transition:stroke-dashoffset 0.6s ease"></circle>
+                <text x="29" y="33" text-anchor="middle" font-size="13" font-weight="700" fill="{{ T.textPrimary }}" font-family="Poppins,sans-serif">{{ proj.completion }}%</text>
+              </svg>
+            </div>
+            <div style="font-size:12px;color:{{ T.textSecondary }};margin:12px 0;line-height:1.5">{{ proj.recentUpdate }}</div>
+            <div style="display:flex;justify-content:space-between;font-size:11.5px;color:{{ T.textSecondary }};margin-bottom:14px">
+              <span>Created {{ proj.createdLabel }}</span>
+              <span>Due {{ proj.deadlineLabel }}</span>
+            </div>
+            <div style="display:flex;align-items:center;justify-content:space-between;gap:10px">
+              <span style="font-size:11.5px;font-weight:600;padding:4px 10px;border-radius:999px;background:{{ proj.statusGlow }};color:{{ proj.statusColor }}">{{ proj.status }}</span>
+              <div style="display:flex;gap:6px">
+                <button onclick="{{ proj.bump }}" aria-label="Advance progress" style="width:30px;height:30px;border-radius:8px;border:1px solid {{ T.cardBorder }};background:transparent;color:{{ T.textPrimary }};cursor:pointer;display:flex;align-items:center;justify-content:center" style-hover="background:{{ T.cardBgHover }}"><i data-lucide="trending-up" style="width:14px;height:14px"></i></button>
+                <button onclick="{{ proj.open }}" style="padding:7px 14px;border-radius:8px;border:none;background:{{ T.gradient }};color:#fff;font-size:12px;font-weight:600;cursor:pointer">Open</button>
+              </div>
+            </div>
+          </div>
+        </sc-for>
+      </div>
+    </section>
+
+    <section style="margin-bottom:48px">
+      <h2 style="font-family:'Poppins',sans-serif;font-size:20px;font-weight:600;margin:0 0 18px">Analytics</h2>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:16px">
+        <div style="padding:22px;border-radius:18px;background:{{ T.cardBg }};border:1px solid {{ T.cardBorder }};backdrop-filter:blur(20px)">
+          <div style="font-size:13px;font-weight:600;color:{{ T.textSecondary }};margin-bottom:16px">Weekly Productivity (hours)</div>
+          <div style="display:flex;align-items:flex-end;gap:10px;height:110px">
+            <sc-for list="{{ weeklyBars }}" as="bar" hint-placeholder-count="7">
+              <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:6px;height:100%;justify-content:flex-end">
+                <div style="width:100%;max-width:26px;border-radius:6px 6px 3px 3px;background:{{ T.gradient }};height:{{ bar.height }};min-height:3px;transition:height 0.5s ease"></div>
+                <span style="font-size:10.5px;color:{{ T.textSecondary }}">{{ bar.label }}</span>
+              </div>
+            </sc-for>
+          </div>
+        </div>
+        <div style="padding:22px;border-radius:18px;background:{{ T.cardBg }};border:1px solid {{ T.cardBorder }};backdrop-filter:blur(20px);display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center">
+          <div style="font-size:13px;font-weight:600;color:{{ T.textSecondary }};margin-bottom:14px">Productivity Score</div>
+          <svg width="120" height="120" viewBox="0 0 120 120">
+            <circle cx="60" cy="60" r="50" fill="none" stroke="{{ T.cardBorder }}" stroke-width="9"></circle>
+            <circle cx="60" cy="60" r="50" fill="none" stroke="url(#scoreGrad)" stroke-width="9" stroke-linecap="round" stroke-dasharray="314.16" stroke-dashoffset="{{ scoreOffset }}" transform="rotate(-90 60 60)" style="transition:stroke-dashoffset 0.8s ease"></circle>
+            <defs><linearGradient id="scoreGrad" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="{{ T.accent }}"></stop><stop offset="1" stop-color="{{ T.secondary }}"></stop></linearGradient></defs>
+            <text x="60" y="68" text-anchor="middle" font-size="26" font-weight="700" fill="{{ T.textPrimary }}" font-family="Poppins,sans-serif">{{ productivityScore }}</text>
+          </svg>
+          <div style="font-size:12px;color:{{ T.textSecondary }};margin-top:6px">out of 100 this week</div>
+        </div>
+        <div style="padding:22px;border-radius:18px;background:{{ T.cardBg }};border:1px solid {{ T.cardBorder }};backdrop-filter:blur(20px)">
+          <div style="font-size:13px;font-weight:600;color:{{ T.textSecondary }};margin-bottom:16px">This Month</div>
+          <div style="display:flex;flex-direction:column;gap:14px">
+            <div style="display:flex;justify-content:space-between;align-items:baseline"><span style="font-size:13px;color:{{ T.textSecondary }}">Hours worked</span><span style="font-family:'Poppins',sans-serif;font-size:20px;font-weight:700">{{ monthlySummary.hours }}</span></div>
+            <div style="display:flex;justify-content:space-between;align-items:baseline"><span style="font-size:13px;color:{{ T.textSecondary }}">Logs created</span><span style="font-family:'Poppins',sans-serif;font-size:20px;font-weight:700">{{ monthlySummary.logs }}</span></div>
+            <div style="display:flex;justify-content:space-between;align-items:baseline"><span style="font-size:13px;color:{{ T.textSecondary }}">Avg. project completion</span><span style="font-family:'Poppins',sans-serif;font-size:20px;font-weight:700">{{ monthlySummary.avgCompletion }}%</span></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section style="margin-bottom:48px">
+      <h2 style="font-family:'Poppins',sans-serif;font-size:20px;font-weight:600;margin:0 0 18px">Achievements</h2>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:14px">
+        <sc-for list="{{ achievements }}" as="ach" hint-placeholder-count="7">
+          <div style="padding:18px;border-radius:16px;background:{{ ach.bg }};border:1px solid {{ ach.border }};text-align:center;opacity:{{ ach.opacity }};transition:opacity 0.4s ease">
+            <div style="width:44px;height:44px;border-radius:12px;background:{{ ach.iconBg }};display:flex;align-items:center;justify-content:center;margin:0 auto 12px">
+              <i data-lucide="{{ ach.icon }}" style="width:20px;height:20px;color:{{ ach.iconColor }}"></i>
+            </div>
+            <div style="font-size:13.5px;font-weight:600;margin-bottom:4px">{{ ach.name }}</div>
+            <div style="font-size:11.5px;color:{{ T.textSecondary }};line-height:1.4">{{ ach.desc }}</div>
+          </div>
+        </sc-for>
+      </div>
+    </section>
+
+    <section style="display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:16px;margin-bottom:20px">
+      <div style="padding:22px;border-radius:18px;background:{{ T.cardBg }};border:1px solid {{ T.cardBorder }};backdrop-filter:blur(20px)">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px">
+          <span style="font-size:14px;font-weight:600">To-Do</span>
+          <i data-lucide="list-checks" style="width:16px;height:16px;color:{{ T.textSecondary }}"></i>
+        </div>
+        <div style="display:flex;gap:8px;margin-bottom:14px">
+          <input value="{{ todoDraft }}" oninput="{{ setTodoDraft }}" onkeydown="{{ todoKeyDown }}" placeholder="Quick add a task..." aria-label="New to-do" style="flex:1;padding:9px 12px;border-radius:10px;border:1px solid {{ T.cardBorder }};background:{{ T.inputBg }};color:{{ T.textPrimary }};font-size:13px;font-family:inherit"/>
+          <button onclick="{{ addTodo }}" aria-label="Add task" style="width:36px;height:36px;border-radius:10px;border:none;background:{{ T.gradient }};color:#fff;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0"><i data-lucide="plus" style="width:16px;height:16px"></i></button>
+        </div>
+        <sc-if value="{{ hasNoTodos }}">
+          <div style="font-size:12.5px;color:{{ T.textSecondary }};text-align:center;padding:16px 0">Nothing on your list. Add a task above.</div>
+        </sc-if>
+        <div style="display:flex;flex-direction:column;gap:8px">
+          <sc-for list="{{ displayTodos }}" as="todo" hint-placeholder-count="0">
+            <div style="display:flex;align-items:center;gap:10px;padding:9px 10px;border-radius:10px;background:{{ T.inputBg }}">
+              <button onclick="{{ todo.toggle }}" aria-label="Toggle done" style="width:18px;height:18px;border-radius:6px;border:1.5px solid {{ todo.checkBorder }};background:{{ todo.checkBg }};cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0">
+                <sc-if value="{{ todo.done }}"><i data-lucide="check" style="width:12px;height:12px;color:#fff"></i></sc-if>
+              </button>
+              <span style="flex:1;font-size:13px;text-decoration:{{ todo.strike }};color:{{ todo.textColor }}">{{ todo.text }}</span>
+              <span style="font-size:10.5px;font-weight:600;color:{{ todo.priorityColor }}">{{ todo.priority }}</span>
+              <button onclick="{{ todo.remove }}" aria-label="Delete task" style="color:{{ T.textSecondary }};background:none;border:none;cursor:pointer;display:flex"><i data-lucide="x" style="width:14px;height:14px"></i></button>
+            </div>
+          </sc-for>
+        </div>
+      </div>
+
+      <div style="padding:22px;border-radius:18px;background:{{ T.stickyBg }};border:1px solid {{ T.cardBorder }};backdrop-filter:blur(20px)">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px">
+          <span style="font-size:14px;font-weight:600">Quick Notes</span>
+          <i data-lucide="sticky-note" style="width:16px;height:16px;color:{{ T.textSecondary }}"></i>
+        </div>
+        <textarea value="{{ note }}" oninput="{{ setNote }}" placeholder="Jot down a quick thought, reminder, or idea..." aria-label="Quick notes" style="width:100%;min-height:150px;resize:vertical;padding:12px;border-radius:12px;border:1px solid {{ T.cardBorder }};background:{{ T.inputBg }};color:{{ T.textPrimary }};font-size:13.5px;font-family:inherit;line-height:1.6"></textarea>
+      </div>
+    </section>
+
+  </div>
+
+  <footer style="text-align:center;padding:28px 20px;color:{{ T.textSecondary }};font-size:13px;border-top:1px solid {{ T.cardBorder }};position:relative;z-index:1">Made with ❤️ · {{ year }}</footer>
+
+  <button onclick="{{ openNewLog }}" aria-label="Add new log" style="position:fixed;bottom:28px;right:28px;width:56px;height:56px;border-radius:50%;border:none;background:{{ T.gradient }};color:#fff;font-size:26px;cursor:pointer;box-shadow:0 10px 30px rgba(108,99,255,0.45);display:flex;align-items:center;justify-content:center;z-index:60;transition:transform 0.2s ease" style-hover="transform:scale(1.08) rotate(90deg)">
+    <i data-lucide="plus" style="width:24px;height:24px"></i>
+  </button>
+
+  <sc-if value="{{ showLogModal }}">
+    <div style="position:fixed;inset:0;z-index:100;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,0.6);backdrop-filter:blur(6px);padding:20px" onclick="{{ closeLogModalOverlay }}">
+      <div onclick="{{ stopProp }}" style="width:100%;max-width:600px;max-height:88vh;overflow-y:auto;border-radius:20px;background:{{ T.modalBg }};border:1px solid {{ T.cardBorder }};padding:28px;animation:fadeInUp 0.3s ease both">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:22px">
+          <span style="font-family:'Poppins',sans-serif;font-size:18px;font-weight:600">{{ logModalTitle }}</span>
+          <button onclick="{{ closeLogModal }}" aria-label="Close" style="background:none;border:none;color:{{ T.textSecondary }};cursor:pointer;display:flex"><i data-lucide="x" style="width:20px;height:20px"></i></button>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px">
+          <div>
+            <label style="font-size:12px;font-weight:600;color:{{ T.textSecondary }};display:block;margin-bottom:6px">Date</label>
+            <input type="date" value="{{ form.date }}" onchange="{{ setFormDate }}" style="width:100%;padding:10px;border-radius:10px;border:1px solid {{ T.cardBorder }};background:{{ T.inputBg }};color:{{ T.textPrimary }};font-size:13px;font-family:inherit"/>
+          </div>
+          <div>
+            <label style="font-size:12px;font-weight:600;color:{{ T.textSecondary }};display:block;margin-bottom:6px">Category</label>
+            <select value="{{ form.category }}" onchange="{{ setFormCategory }}" style="width:100%;padding:10px;border-radius:10px;border:1px solid {{ T.cardBorder }};background:{{ T.inputBg }};color:{{ T.textPrimary }};font-size:13px;font-family:inherit">
+              <sc-for list="{{ categories }}" as="cat"><option value="{{ cat }}">{{ cat }}</option></sc-for>
+            </select>
+          </div>
+        </div>
+        <div style="margin-bottom:14px">
+          <label style="font-size:12px;font-weight:600;color:{{ T.textSecondary }};display:block;margin-bottom:6px">Project Name</label>
+          <input value="{{ form.project }}" oninput="{{ setFormProject }}" placeholder="e.g. Project Logbook" list="projectNamesList" style="width:100%;padding:10px;border-radius:10px;border:1px solid {{ T.cardBorder }};background:{{ T.inputBg }};color:{{ T.textPrimary }};font-size:13px;font-family:inherit"/>
+          <datalist id="projectNamesList"><sc-for list="{{ projectNames }}" as="pn"><option value="{{ pn }}"></option></sc-for></datalist>
+        </div>
+        <div style="margin-bottom:14px">
+          <label style="font-size:12px;font-weight:600;color:{{ T.textSecondary }};display:block;margin-bottom:6px">Today's Goal</label>
+          <input value="{{ form.goal }}" oninput="{{ setFormGoal }}" placeholder="What are you aiming to finish today?" style="width:100%;padding:10px;border-radius:10px;border:1px solid {{ T.cardBorder }};background:{{ T.inputBg }};color:{{ T.textPrimary }};font-size:13px;font-family:inherit"/>
+        </div>
+        <div style="margin-bottom:14px">
+          <label style="font-size:12px;font-weight:600;color:{{ T.textSecondary }};display:block;margin-bottom:6px">Completed Today</label>
+          <textarea value="{{ form.completed }}" oninput="{{ setFormCompleted }}" placeholder="What did you actually get done?" style="width:100%;min-height:60px;resize:vertical;padding:10px;border-radius:10px;border:1px solid {{ T.cardBorder }};background:{{ T.inputBg }};color:{{ T.textPrimary }};font-size:13px;font-family:inherit"></textarea>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px">
+          <div>
+            <label style="font-size:12px;font-weight:600;color:{{ T.textSecondary }};display:block;margin-bottom:6px">Problems Faced</label>
+            <textarea value="{{ form.problems }}" oninput="{{ setFormProblems }}" placeholder="Any blockers?" style="width:100%;min-height:60px;resize:vertical;padding:10px;border-radius:10px;border:1px solid {{ T.cardBorder }};background:{{ T.inputBg }};color:{{ T.textPrimary }};font-size:13px;font-family:inherit"></textarea>
+          </div>
+          <div>
+            <label style="font-size:12px;font-weight:600;color:{{ T.textSecondary }};display:block;margin-bottom:6px">Solution Found</label>
+            <textarea value="{{ form.solution }}" oninput="{{ setFormSolution }}" placeholder="How did you solve it?" style="width:100%;min-height:60px;resize:vertical;padding:10px;border-radius:10px;border:1px solid {{ T.cardBorder }};background:{{ T.inputBg }};color:{{ T.textPrimary }};font-size:13px;font-family:inherit"></textarea>
+          </div>
+        </div>
+        <div style="margin-bottom:14px">
+          <label style="font-size:12px;font-weight:600;color:{{ T.textSecondary }};display:block;margin-bottom:6px">Tomorrow's Plan</label>
+          <input value="{{ form.tomorrowPlan }}" oninput="{{ setFormTomorrow }}" placeholder="What's next?" style="width:100%;padding:10px;border-radius:10px;border:1px solid {{ T.cardBorder }};background:{{ T.inputBg }};color:{{ T.textPrimary }};font-size:13px;font-family:inherit"/>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:16px">
+          <div>
+            <label style="font-size:12px;font-weight:600;color:{{ T.textSecondary }};display:block;margin-bottom:6px">Hours Worked</label>
+            <input type="number" min="0" max="24" step="0.5" value="{{ form.hours }}" oninput="{{ setFormHours }}" style="width:100%;padding:10px;border-radius:10px;border:1px solid {{ T.cardBorder }};background:{{ T.inputBg }};color:{{ T.textPrimary }};font-size:13px;font-family:inherit"/>
+          </div>
+          <div>
+            <label style="font-size:12px;font-weight:600;color:{{ T.textSecondary }};display:block;margin-bottom:6px">Progress ({{ form.progress }}%)</label>
+            <input type="range" min="0" max="100" value="{{ form.progress }}" oninput="{{ setFormProgress }}" style="width:100%;margin-top:12px;accent-color:{{ T.accent }}"/>
+          </div>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:20px">
+          <div>
+            <label style="font-size:12px;font-weight:600;color:{{ T.textSecondary }};display:block;margin-bottom:6px">Mood</label>
+            <div style="display:flex;gap:8px">
+              <button onclick="{{ setMoodHappy }}" style="flex:1;padding:9px;border-radius:10px;font-size:18px;cursor:pointer;border:1.5px solid {{ moodHappyBorder }};background:{{ T.inputBg }}">😀</button>
+              <button onclick="{{ setMoodNeutral }}" style="flex:1;padding:9px;border-radius:10px;font-size:18px;cursor:pointer;border:1.5px solid {{ moodNeutralBorder }};background:{{ T.inputBg }}">😐</button>
+              <button onclick="{{ setMoodSad }}" style="flex:1;padding:9px;border-radius:10px;font-size:18px;cursor:pointer;border:1.5px solid {{ moodSadBorder }};background:{{ T.inputBg }}">😫</button>
+            </div>
+          </div>
+          <div>
+            <label style="font-size:12px;font-weight:600;color:{{ T.textSecondary }};display:block;margin-bottom:6px">Priority</label>
+            <div style="display:flex;gap:8px">
+              <button onclick="{{ setPriorityHigh }}" style="flex:1;padding:9px;border-radius:10px;font-size:11.5px;font-weight:600;cursor:pointer;border:1.5px solid {{ prioHighBorder }};background:{{ T.inputBg }};color:{{ T.danger }}">High</button>
+              <button onclick="{{ setPriorityMedium }}" style="flex:1;padding:9px;border-radius:10px;font-size:11.5px;font-weight:600;cursor:pointer;border:1.5px solid {{ prioMedBorder }};background:{{ T.inputBg }};color:{{ T.warning }}">Medium</button>
+              <button onclick="{{ setPriorityLow }}" style="flex:1;padding:9px;border-radius:10px;font-size:11.5px;font-weight:600;cursor:pointer;border:1.5px solid {{ prioLowBorder }};background:{{ T.inputBg }};color:{{ T.success }}">Low</button>
+            </div>
+          </div>
+        </div>
+        <div style="margin-bottom:22px">
+          <label style="font-size:12px;font-weight:600;color:{{ T.textSecondary }};display:block;margin-bottom:6px">Attachments</label>
+          <div style="border:1.5px dashed {{ T.cardBorder }};border-radius:12px;padding:18px;text-align:center;color:{{ T.textSecondary }};font-size:12px">
+            <i data-lucide="paperclip" style="width:16px;height:16px;margin-bottom:6px"></i><br/>Drop files here <span style="opacity:0.6">(UI only)</span>
+          </div>
+        </div>
+        <div style="display:flex;gap:10px;justify-content:flex-end">
+          <button onclick="{{ closeLogModal }}" style="padding:11px 20px;border-radius:11px;border:1px solid {{ T.cardBorder }};background:transparent;color:{{ T.textPrimary }};font-weight:600;font-size:13.5px;cursor:pointer">Cancel</button>
+          <button onclick="{{ saveLog }}" style="padding:11px 22px;border-radius:11px;border:none;background:{{ T.gradient }};color:#fff;font-weight:600;font-size:13.5px;cursor:pointer;box-shadow:0 6px 20px rgba(108,99,255,0.35)">Save Log</button>
+        </div>
+      </div>
+    </div>
+  </sc-if>
+
+  <sc-if value="{{ showProjectModal }}">
+    <div style="position:fixed;inset:0;z-index:100;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,0.6);backdrop-filter:blur(6px);padding:20px" onclick="{{ closeProjectModalOverlay }}">
+      <div onclick="{{ stopProp }}" style="width:100%;max-width:460px;max-height:88vh;overflow-y:auto;border-radius:20px;background:{{ T.modalBg }};border:1px solid {{ T.cardBorder }};padding:28px;animation:fadeInUp 0.3s ease both">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px">
+          <span style="font-family:'Poppins',sans-serif;font-size:18px;font-weight:600">New Project</span>
+          <button onclick="{{ closeProjectModal }}" aria-label="Close" style="background:none;border:none;color:{{ T.textSecondary }};cursor:pointer;display:flex"><i data-lucide="x" style="width:20px;height:20px"></i></button>
+        </div>
+        <div style="margin-bottom:14px">
+          <label style="font-size:12px;font-weight:600;color:{{ T.textSecondary }};display:block;margin-bottom:6px">Project Name</label>
+          <input value="{{ pForm.name }}" oninput="{{ setPFormName }}" placeholder="e.g. Campus Connect" style="width:100%;padding:10px;border-radius:10px;border:1px solid {{ T.cardBorder }};background:{{ T.inputBg }};color:{{ T.textPrimary }};font-size:13px;font-family:inherit"/>
+        </div>
+        <div style="margin-bottom:14px">
+          <label style="font-size:12px;font-weight:600;color:{{ T.textSecondary }};display:block;margin-bottom:6px">Technology Tags (comma separated)</label>
+          <input value="{{ pForm.techsInput }}" oninput="{{ setPFormTechs }}" placeholder="React, Node, MongoDB" style="width:100%;padding:10px;border-radius:10px;border:1px solid {{ T.cardBorder }};background:{{ T.inputBg }};color:{{ T.textPrimary }};font-size:13px;font-family:inherit"/>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px">
+          <div>
+            <label style="font-size:12px;font-weight:600;color:{{ T.textSecondary }};display:block;margin-bottom:6px">Created</label>
+            <input type="date" value="{{ pForm.created }}" onchange="{{ setPFormCreated }}" style="width:100%;padding:10px;border-radius:10px;border:1px solid {{ T.cardBorder }};background:{{ T.inputBg }};color:{{ T.textPrimary }};font-size:13px;font-family:inherit"/>
+          </div>
+          <div>
+            <label style="font-size:12px;font-weight:600;color:{{ T.textSecondary }};display:block;margin-bottom:6px">Deadline</label>
+            <input type="date" value="{{ pForm.deadline }}" onchange="{{ setPFormDeadline }}" style="width:100%;padding:10px;border-radius:10px;border:1px solid {{ T.cardBorder }};background:{{ T.inputBg }};color:{{ T.textPrimary }};font-size:13px;font-family:inherit"/>
+          </div>
+        </div>
+        <div style="margin-bottom:14px">
+          <label style="font-size:12px;font-weight:600;color:{{ T.textSecondary }};display:block;margin-bottom:6px">Status</label>
+          <select value="{{ pForm.status }}" onchange="{{ setPFormStatus }}" style="width:100%;padding:10px;border-radius:10px;border:1px solid {{ T.cardBorder }};background:{{ T.inputBg }};color:{{ T.textPrimary }};font-size:13px;font-family:inherit">
+            <option>Not Started</option><option>In Progress</option><option>Completed</option>
+          </select>
+        </div>
+        <div style="margin-bottom:20px">
+          <label style="font-size:12px;font-weight:600;color:{{ T.textSecondary }};display:block;margin-bottom:6px">Recent Update</label>
+          <input value="{{ pForm.recentUpdate }}" oninput="{{ setPFormUpdate }}" placeholder="What's the latest?" style="width:100%;padding:10px;border-radius:10px;border:1px solid {{ T.cardBorder }};background:{{ T.inputBg }};color:{{ T.textPrimary }};font-size:13px;font-family:inherit"/>
+        </div>
+        <div style="display:flex;gap:10px;justify-content:flex-end">
+          <button onclick="{{ closeProjectModal }}" style="padding:11px 20px;border-radius:11px;border:1px solid {{ T.cardBorder }};background:transparent;color:{{ T.textPrimary }};font-weight:600;font-size:13.5px;cursor:pointer">Cancel</button>
+          <button onclick="{{ saveProject }}" style="padding:11px 22px;border-radius:11px;border:none;background:{{ T.gradient }};color:#fff;font-weight:600;font-size:13.5px;cursor:pointer;box-shadow:0 6px 20px rgba(108,99,255,0.35)">Save Project</button>
+        </div>
+      </div>
+    </div>
+  </sc-if>
+
+  <sc-if value="{{ hasConfetti }}">
+    <div style="position:fixed;inset:0;z-index:200;pointer-events:none;overflow:hidden">
+      <sc-for list="{{ confetti }}" as="piece" hint-placeholder-count="0">
+        <div style="position:absolute;top:0;left:{{ piece.left }};width:8px;height:14px;background:{{ piece.color }};border-radius:2px;animation:confettiFall {{ piece.duration }} linear {{ piece.delay }} both"></div>
+      </sc-for>
+    </div>
+  </sc-if>
+
+  <sc-if value="{{ toast }}">
+    <div style="position:fixed;bottom:100px;left:50%;transform:translateX(-50%);z-index:150;padding:12px 20px;border-radius:12px;background:{{ T.modalBg }};border:1px solid {{ T.cardBorder }};color:{{ T.textPrimary }};font-size:13px;font-weight:500;box-shadow:0 10px 30px rgba(0,0,0,0.3);animation:fadeInUp 0.3s ease both">{{ toast }}</div>
+  </sc-if>
+
+</div>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  state = {
+    theme: 'dark',
+    loaderVisible: true,
+    loaderOpacity: 1,
+    projects: [],
+    logs: [],
+    todos: [],
+    note: '',
+    search: '',
+    filter: 'all',
+    categoryFilter: 'All',
+    expandedId: null,
+    showLogModal: false,
+    editLogId: null,
+    form: this.emptyForm(),
+    showProjectModal: false,
+    pForm: this.emptyPForm(),
+    todoDraft: '',
+    confetti: [],
+    toast: null,
+  };
+
+  categories = ['Placement', 'DSA', 'Web Development', 'AI', 'College', 'Hackathon', 'Personal'];
+  categoryColors = { Placement: '#00C2FF', DSA: '#6C63FF', 'Web Development': '#22C55E', AI: '#F59E0B', College: '#94A3B8', Hackathon: '#EF4444', Personal: '#EC4899' };
+  quotes = [
+    'Small commits, big progress.',
+    'Done is better than perfect.',
+    'Debug today, ship tomorrow.',
+    'Consistency beats intensity.',
+    'Your streak is your story.',
+    'Progress, not perfection.',
+    'Every log is a rep.',
+    'Show up. The rest compounds.'
+  ];
+  achievementDefs = [
+    { id: 'first_log', name: 'First Log', icon: 'notebook-pen', desc: 'Logged your first day of progress.', check: c => c.logs.length >= 1 },
+    { id: 'streak7', name: '7 Day Streak', icon: 'flame', desc: 'Logged progress 7 days in a row.', check: c => c.streak >= 7 },
+    { id: 'streak30', name: '30 Day Streak', icon: 'flame', desc: 'Logged progress 30 days in a row.', check: c => c.streak >= 30 },
+    { id: 'hours100', name: '100 Hours', icon: 'clock', desc: 'Crossed 100 hours of logged work.', check: c => c.totalHours >= 100 },
+    { id: 'project_done', name: 'Project Completed', icon: 'check-circle-2', desc: 'Shipped a project end to end.', check: c => c.projects.some(p => p.status === 'Completed' || p.completion >= 100) },
+    { id: 'hackathon_ready', name: 'Hackathon Ready', icon: 'rocket', desc: 'Logged 3+ hackathon sessions.', check: c => c.logs.filter(l => l.category === 'Hackathon').length >= 3 },
+    { id: 'interview_prep', name: 'Interview Prep', icon: 'target', desc: 'Logged 5+ placement prep sessions.', check: c => c.logs.filter(l => l.category === 'Placement').length >= 5 },
+  ];
+
+  emptyForm() {
+    const d = new Date(); d.setMinutes(d.getMinutes() - d.getTimezoneOffset());
+    return { date: d.toISOString().slice(0, 10), project: '', category: 'DSA', goal: '', completed: '', problems: '', solution: '', tomorrowPlan: '', hours: 1, mood: '😀', progress: 20, priority: 'Medium' };
+  }
+  emptyPForm() {
+    const d = new Date(); d.setMinutes(d.getMinutes() - d.getTimezoneOffset());
+    return { name: '', techsInput: '', created: d.toISOString().slice(0, 10), deadline: '', status: 'Not Started', recentUpdate: '' };
+  }
+
+  componentDidMount() {
+    try {
+      const raw = localStorage.getItem('projectLogbook_v1');
+      if (raw) {
+        const data = JSON.parse(raw);
+        this.setState({
+          projects: data.projects || [],
+          logs: data.logs || [],
+          todos: data.todos || [],
+          note: data.note || '',
+          theme: data.theme || 'dark',
+        });
+      }
+    } catch (e) {}
+    setTimeout(() => this.setState({ loaderOpacity: 0 }), 650);
+    setTimeout(() => this.setState({ loaderVisible: false }), 1000);
+    this._icons();
+  }
+  componentDidUpdate() { this._icons(); }
+  _icons() { if (window.lucide && window.lucide.createIcons) window.lucide.createIcons(); }
+
+  persist(patch) {
+    this.setState(patch, () => {
+      const { projects, logs, todos, note, theme } = this.state;
+      localStorage.setItem('projectLogbook_v1', JSON.stringify({ projects, logs, todos, note, theme }));
+    });
+  }
+
+  fmt(d) { return d.toISOString().slice(0, 10); }
+  stopProp = (e) => e.stopPropagation();
+
+  toggleTheme = () => this.persist({ theme: this.state.theme === 'dark' ? 'light' : 'dark' });
+
+  computeStreak(logs) {
+    const set = new Set(logs.map(l => l.date));
+    let d = new Date(); d.setHours(0, 0, 0, 0);
+    let cur = this.fmt(d);
+    if (!set.has(cur)) { d.setDate(d.getDate() - 1); cur = this.fmt(d); }
+    let streak = 0;
+    while (set.has(cur)) { streak++; d.setDate(d.getDate() - 1); cur = this.fmt(d); }
+    return streak;
+  }
+
+  showToast(msg) {
+    this.setState({ toast: msg });
+    clearTimeout(this._toastTimer);
+    this._toastTimer = setTimeout(() => this.setState({ toast: null }), 2200);
+  }
+
+  openNewLog = () => this.setState({ form: this.emptyForm(), editLogId: null, showLogModal: true });
+  editLogFn = (id) => {
+    const log = this.state.logs.find(l => l.id === id);
+    if (log) this.setState({ form: { ...log }, editLogId: id, showLogModal: true });
+  };
+  closeLogModal = () => this.setState({ showLogModal: false });
+  closeLogModalOverlay = () => this.setState({ showLogModal: false });
+  deleteLogFn = (id) => this.persist({ logs: this.state.logs.filter(l => l.id !== id) });
+  toggleExpand = (id) => this.setState(s => ({ expandedId: s.expandedId === id ? null : id }));
+
+  saveLog = () => {
+    const f = this.state.form;
+    if (!f.project.trim()) { this.showToast('Add a project name first'); return; }
+    let logs = [...this.state.logs];
+    if (this.state.editLogId) {
+      logs = logs.map(l => l.id === this.state.editLogId ? { ...f, id: l.id } : l);
+    } else {
+      logs.push({ ...f, id: Date.now() });
+    }
+    this.persist({ logs, showLogModal: false });
+    this.showToast('Log saved');
+  };
+
+  setFormField(field, value) { this.setState(s => ({ form: { ...s.form, [field]: value } })); }
+  setFormDate = (e) => this.setFormField('date', e.target.value);
+  setFormCategory = (e) => this.setFormField('category', e.target.value);
+  setFormProject = (e) => this.setFormField('project', e.target.value);
+  setFormGoal = (e) => this.setFormField('goal', e.target.value);
+  setFormCompleted = (e) => this.setFormField('completed', e.target.value);
+  setFormProblems = (e) => this.setFormField('problems', e.target.value);
+  setFormSolution = (e) => this.setFormField('solution', e.target.value);
+  setFormTomorrow = (e) => this.setFormField('tomorrowPlan', e.target.value);
+  setFormHours = (e) => this.setFormField('hours', e.target.value);
+  setFormProgress = (e) => this.setFormField('progress', e.target.value);
+  setMoodHappy = () => this.setFormField('mood', '😀');
+  setMoodNeutral = () => this.setFormField('mood', '😐');
+  setMoodSad = () => this.setFormField('mood', '😫');
+  setPriorityHigh = () => this.setFormField('priority', 'High');
+  setPriorityMedium = () => this.setFormField('priority', 'Medium');
+  setPriorityLow = () => this.setFormField('priority', 'Low');
+
+  openNewProject = () => this.setState({ pForm: this.emptyPForm(), showProjectModal: true });
+  closeProjectModal = () => this.setState({ showProjectModal: false });
+  closeProjectModalOverlay = () => this.setState({ showProjectModal: false });
+  setPFormField(field, value) { this.setState(s => ({ pForm: { ...s.pForm, [field]: value } })); }
+  setPFormName = (e) => this.setPFormField('name', e.target.value);
+  setPFormTechs = (e) => this.setPFormField('techsInput', e.target.value);
+  setPFormCreated = (e) => this.setPFormField('created', e.target.value);
+  setPFormDeadline = (e) => this.setPFormField('deadline', e.target.value);
+  setPFormStatus = (e) => this.setPFormField('status', e.target.value);
+  setPFormUpdate = (e) => this.setPFormField('recentUpdate', e.target.value);
+
+  saveProject = () => {
+    const f = this.state.pForm;
+    if (!f.name.trim()) { this.showToast('Add a project name first'); return; }
+    const techs = f.techsInput.split(',').map(t => t.trim()).filter(Boolean);
+    const completion = f.status === 'Completed' ? 100 : f.status === 'Not Started' ? 0 : 20;
+    const proj = { id: Date.now(), name: f.name, techs, created: f.created, deadline: f.deadline, status: f.status, completion, recentUpdate: f.recentUpdate || 'Just getting started.' };
+    this.persist({ projects: [...this.state.projects, proj], showProjectModal: false });
+    this.showToast('Project added');
+  };
+
+  bumpProject = (id) => {
+    const projects = this.state.projects.map(p => {
+      if (p.id !== id) return p;
+      const next = Math.min(100, p.completion + 10);
+      if (next >= 100 && p.completion < 100) this.triggerConfetti();
+      return { ...p, completion: next, status: next >= 100 ? 'Completed' : 'In Progress' };
+    });
+    this.persist({ projects });
+  };
+
+  openProject = (name) => {
+    this.setState({ search: name });
+    if (this.timelineEl) window.scrollTo({ top: this.timelineEl.offsetTop - 90, behavior: 'smooth' });
+  };
+
+  triggerConfetti() {
+    const colors = ['#6C63FF', '#00C2FF', '#22C55E', '#F59E0B'];
+    const pieces = Array.from({ length: 36 }, (_, i) => ({
+      left: Math.random() * 100 + '%',
+      color: colors[i % colors.length],
+      duration: (1.8 + Math.random() * 1.2).toFixed(2) + 's',
+      delay: (Math.random() * 0.4).toFixed(2) + 's',
+    }));
+    this.setState({ confetti: pieces });
+    setTimeout(() => this.setState({ confetti: [] }), 3200);
+  }
+
+  setSearch = (e) => this.setState({ search: e.target.value });
+  setCategoryFilter = (e) => this.setState({ categoryFilter: e.target.value });
+  setFilter = (key) => this.setState({ filter: key });
+
+  todoDraftSet = (e) => this.setState({ todoDraft: e.target.value });
+  addTodo = () => {
+    const text = this.state.todoDraft.trim();
+    if (!text) return;
+    const todo = { id: Date.now(), text, done: false, priority: 'Medium', dueDate: '' };
+    this.persist({ todos: [...this.state.todos, todo], todoDraft: '' });
+  };
+  todoKeyDown = (e) => { if (e.key === 'Enter') this.addTodo(); };
+  toggleTodo = (id) => this.persist({ todos: this.state.todos.map(t => t.id === id ? { ...t, done: !t.done } : t) });
+  deleteTodo = (id) => this.persist({ todos: this.state.todos.filter(t => t.id !== id) });
+
+  setNote = (e) => this.persist({ note: e.target.value });
+
+  timelineRef = (el) => { this.timelineEl = el; };
+
+  filteredLogs() {
+    const { filter, categoryFilter, search, logs } = this.state;
+    let result = [...logs];
+    const now = new Date(); now.setHours(0, 0, 0, 0);
+    if (filter === 'today') { const t = this.fmt(now); result = result.filter(l => l.date === t); }
+    else if (filter === 'week') { const wa = new Date(now); wa.setDate(now.getDate() - 6); result = result.filter(l => new Date(l.date) >= wa); }
+    else if (filter === 'month') { result = result.filter(l => { const d = new Date(l.date); return d.getMonth() === now.getMonth() && d.getFullYear() === now.getFullYear(); }); }
+    else if (filter === 'completed') { result = result.filter(l => Number(l.progress) >= 100); }
+    else if (filter === 'ongoing') { result = result.filter(l => Number(l.progress) < 100); }
+    if (categoryFilter !== 'All') result = result.filter(l => l.category === categoryFilter);
+    if (search.trim()) {
+      const q = search.toLowerCase();
+      result = result.filter(l => [l.project, l.category, l.goal, l.completed, l.problems, l.solution, l.tomorrowPlan].join(' ').toLowerCase().includes(q));
+    }
+    result.sort((a, b) => b.date.localeCompare(a.date) || b.id - a.id);
+    return result;
+  }
+
+  dateLabel(dateStr) {
+    const d = new Date(dateStr + 'T00:00:00');
+    const today = new Date(); today.setHours(0, 0, 0, 0);
+    const yest = new Date(today); yest.setDate(today.getDate() - 1);
+    if (this.fmt(d) === this.fmt(today)) return 'Today';
+    if (this.fmt(d) === this.fmt(yest)) return 'Yesterday';
+    return d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+  }
+
+  renderVals() {
+    const isDark = this.state.theme === 'dark';
+    const T = isDark ? {
+      bg: '#0B0F19', cardBg: 'rgba(255,255,255,0.06)', cardBgHover: 'rgba(255,255,255,0.1)', cardBorder: 'rgba(255,255,255,0.1)',
+      textPrimary: 'rgba(255,255,255,0.94)', textSecondary: 'rgba(255,255,255,0.55)', navBg: 'rgba(11,15,25,0.7)',
+      inputBg: 'rgba(255,255,255,0.05)', modalBg: '#12172a', stickyBg: 'rgba(245,197,66,0.06)', accentText: '#a9a3ff',
+      accent: '#6C63FF', secondary: '#00C2FF', success: '#22C55E', warning: '#F59E0B', danger: '#EF4444', gradient: 'linear-gradient(135deg,#6C63FF,#00C2FF)',
+    } : {
+      bg: '#F3F4F8', cardBg: 'rgba(255,255,255,0.7)', cardBgHover: 'rgba(255,255,255,0.95)', cardBorder: 'rgba(15,23,42,0.09)',
+      textPrimary: 'rgba(15,23,42,0.92)', textSecondary: 'rgba(15,23,42,0.55)', navBg: 'rgba(243,244,248,0.75)',
+      inputBg: 'rgba(15,23,42,0.04)', modalBg: '#ffffff', stickyBg: 'rgba(245,197,66,0.12)', accentText: '#5b52e0',
+      accent: '#6C63FF', secondary: '#00A8DE', success: '#16A34A', warning: '#D97706', danger: '#DC2626', gradient: 'linear-gradient(135deg,#6C63FF,#00A8DE)',
+    };
+
+    const { logs, projects, todos } = this.state;
+    const totalHours = logs.reduce((s, l) => s + Number(l.hours || 0), 0);
+    const streak = this.computeStreak(logs);
+    const now = new Date(); now.setHours(0, 0, 0, 0);
+    const todayStr = this.fmt(now);
+    const todaysLogs = logs.filter(l => l.date === todayStr).length;
+    const completedTasks = todos.filter(t => t.done).length;
+
+    const hour = new Date().getHours();
+    const greetingWord = hour < 12 ? 'Good Morning' : hour < 17 ? 'Good Afternoon' : 'Good Evening';
+    const dayOfYear = Math.floor((now - new Date(now.getFullYear(), 0, 0)) / 86400000);
+    const quote = this.quotes[dayOfYear % this.quotes.length];
+
+    const statCards = [
+      { label: 'Projects', value: projects.length, icon: 'folder', tint: 'rgba(108,99,255,0.15)', iconColor: T.accent },
+      { label: "Today's Logs", value: todaysLogs, icon: 'notebook-pen', tint: 'rgba(0,194,255,0.15)', iconColor: T.secondary },
+      { label: 'Current Streak', value: streak, icon: 'flame', tint: 'rgba(245,158,11,0.15)', iconColor: T.warning },
+      { label: 'Completed Tasks', value: completedTasks, icon: 'check-circle-2', tint: 'rgba(34,197,94,0.15)', iconColor: T.success },
+      { label: 'Hours Worked', value: totalHours, icon: 'clock', tint: 'rgba(239,68,68,0.15)', iconColor: T.danger },
+    ];
+
+    const chips = [
+      { key: 'all', label: 'All' }, { key: 'today', label: 'Today' }, { key: 'week', label: 'This Week' },
+      { key: 'month', label: 'This Month' }, { key: 'completed', label: 'Completed' }, { key: 'ongoing', label: 'Ongoing' },
+    ];
+    const filterChips = chips.map(c => ({
+      label: c.label, onClick: () => this.setFilter(c.key),
+      bg: this.state.filter === c.key ? T.gradient : 'transparent',
+      color: this.state.filter === c.key ? '#fff' : T.textPrimary,
+      border: this.state.filter === c.key ? 'transparent' : T.cardBorder,
+    }));
+
+    const priorityColorFor = (p) => p === 'High' ? T.danger : p === 'Low' ? T.success : T.warning;
+
+    const rawFiltered = this.filteredLogs();
+    const displayLogs = rawFiltered.map(l => {
+      const catColor = this.categoryColors[l.category] || T.accent;
+      return {
+        id: l.id, project: l.project, category: l.category, categoryColor: catColor, categoryGlow: catColor + '26',
+        dateLabel: this.dateLabel(l.date), hours: l.hours, mood: l.mood, progressPct: (l.progress || 0) + '%',
+        goal: l.goal || '—', completed: l.completed || '—', problems: l.problems || '—', solution: l.solution || '—',
+        tomorrowPlan: l.tomorrowPlan || '—', priority: l.priority, priorityColor: priorityColorFor(l.priority),
+        expanded: this.state.expandedId === l.id, chevron: this.state.expandedId === l.id ? 'chevron-up' : 'chevron-down',
+        toggle: () => this.toggleExpand(l.id), edit: () => this.editLogFn(l.id), remove: () => this.deleteLogFn(l.id),
+      };
+    });
+
+    const statusColorFor = (s) => s === 'Completed' ? T.success : s === 'Not Started' ? T.textSecondary : T.secondary;
+    const displayProjects = projects.map(p => {
+      const circumference = 150.8;
+      const dashOffset = circumference * (1 - (p.completion || 0) / 100);
+      const sc = statusColorFor(p.status);
+      return {
+        ...p, dashOffset, ringColor: T.accent, statusColor: sc, statusGlow: sc + '22',
+        createdLabel: p.created ? new Date(p.created + 'T00:00:00').toLocaleDateString('en-US', { month: 'short', day: 'numeric' }) : '—',
+        deadlineLabel: p.deadline ? new Date(p.deadline + 'T00:00:00').toLocaleDateString('en-US', { month: 'short', day: 'numeric' }) : '—',
+        bump: () => this.bumpProject(p.id), open: () => this.openProject(p.name),
+      };
+    });
+
+    const weekLabels = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+    const weekHours = [0, 0, 0, 0, 0, 0, 0];
+    for (let i = 0; i < 7; i++) {
+      const d = new Date(now); d.setDate(now.getDate() - 6 + i);
+      const ds = this.fmt(d);
+      weekHours[i] = logs.filter(l => l.date === ds).reduce((s, l) => s + Number(l.hours || 0), 0);
+    }
+    const maxHour = Math.max(1, ...weekHours);
+    const weeklyBars = weekHours.map((h, i) => {
+      const d = new Date(now); d.setDate(now.getDate() - 6 + i);
+      return { label: weekLabels[d.getDay()], height: Math.round((h / maxHour) * 100) + '%' };
+    });
+
+    const monthLogs = logs.filter(l => { const d = new Date(l.date); return d.getMonth() === now.getMonth() && d.getFullYear() === now.getFullYear(); });
+    const monthlySummary = {
+      hours: monthLogs.reduce((s, l) => s + Number(l.hours || 0), 0),
+      logs: monthLogs.length,
+      avgCompletion: projects.length ? Math.round(projects.reduce((s, p) => s + (p.completion || 0), 0) / projects.length) : 0,
+    };
+    const weekLogsCount = logs.filter(l => { const d = new Date(l.date); const wa = new Date(now); wa.setDate(now.getDate() - 6); return d >= wa; }).length;
+    const weekHoursSum = weekHours.reduce((a, b) => a + b, 0);
+    const productivityScore = Math.max(0, Math.min(100, Math.round(streak * 4 + weekHoursSum * 2.2 + weekLogsCount * 3)));
+    const scoreOffset = 314.16 * (1 - productivityScore / 100);
+
+    const ctx = { logs, projects, totalHours, streak };
+    const achColors = [T.accent, T.secondary, T.success, T.warning, T.danger];
+    const achievements = this.achievementDefs.map((a, i) => {
+      const unlocked = a.check(ctx);
+      const c = achColors[i % achColors.length];
+      return {
+        id: a.id, name: a.name, desc: a.desc, icon: a.icon,
+        bg: unlocked ? c + '14' : T.cardBg, border: unlocked ? c + '40' : T.cardBorder,
+        iconBg: unlocked ? c + '22' : T.cardBorder, iconColor: unlocked ? c : T.textSecondary,
+        opacity: unlocked ? 1 : 0.45,
+      };
+    });
+
+    const displayTodos = todos.slice().sort((a, b) => a.done - b.done).map(t => ({
+      ...t, strike: t.done ? 'line-through' : 'none', textColor: t.done ? T.textSecondary : T.textPrimary,
+      checkBorder: t.done ? T.accent : T.cardBorder, checkBg: t.done ? T.accent : 'transparent',
+      priorityColor: priorityColorFor(t.priority),
+      toggle: () => this.toggleTodo(t.id), remove: () => this.deleteTodo(t.id),
+    }));
+
+    return {
+      T, year: now.getFullYear(),
+      loaderVisible: this.state.loaderVisible, loaderOpacity: this.state.loaderOpacity,
+      themeIcon: isDark ? 'sun' : 'moon', toggleTheme: this.toggleTheme,
+      todayLabel: now.toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' }),
+      greeting: greetingWord, quote, hasStreak: streak > 0, stats: { streak },
+      statCards, openNewLog: this.openNewLog,
+      search: this.state.search, setSearch: this.setSearch,
+      categories: this.categories, categoryFilter: this.state.categoryFilter, setCategoryFilter: this.setCategoryFilter,
+      filterChips,
+      timelineRef: this.timelineRef,
+      hasNoLogs: logs.length === 0, hasLogsButFiltered: logs.length > 0 && displayLogs.length === 0,
+      displayLogs,
+      openNewProject: this.openNewProject, hasNoProjects: projects.length === 0, displayProjects,
+      weeklyBars, scoreOffset, productivityScore, monthlySummary,
+      achievements,
+      todoDraft: this.state.todoDraft, setTodoDraft: this.todoDraftSet, addTodo: this.addTodo, todoKeyDown: this.todoKeyDown,
+      hasNoTodos: todos.length === 0, displayTodos,
+      note: this.state.note, setNote: this.setNote,
+      showLogModal: this.state.showLogModal, closeLogModal: this.closeLogModal, closeLogModalOverlay: this.closeLogModalOverlay, stopProp: this.stopProp,
+      logModalTitle: this.state.editLogId ? 'Edit Log' : 'New Log',
+      form: this.state.form, projectNames: projects.map(p => p.name),
+      setFormDate: this.setFormDate, setFormCategory: this.setFormCategory, setFormProject: this.setFormProject, setFormGoal: this.setFormGoal,
+      setFormCompleted: this.setFormCompleted, setFormProblems: this.setFormProblems, setFormSolution: this.setFormSolution, setFormTomorrow: this.setFormTomorrow,
+      setFormHours: this.setFormHours, setFormProgress: this.setFormProgress,
+      setMoodHappy: this.setMoodHappy, setMoodNeutral: this.setMoodNeutral, setMoodSad: this.setMoodSad,
+      moodHappyBorder: this.state.form.mood === '😀' ? T.accent : T.cardBorder,
+      moodNeutralBorder: this.state.form.mood === '😐' ? T.accent : T.cardBorder,
+      moodSadBorder: this.state.form.mood === '😫' ? T.accent : T.cardBorder,
+      setPriorityHigh: this.setPriorityHigh, setPriorityMedium: this.setPriorityMedium, setPriorityLow: this.setPriorityLow,
+      prioHighBorder: this.state.form.priority === 'High' ? T.danger : T.cardBorder,
+      prioMedBorder: this.state.form.priority === 'Medium' ? T.warning : T.cardBorder,
+      prioLowBorder: this.state.form.priority === 'Low' ? T.success : T.cardBorder,
+      saveLog: this.saveLog,
+      showProjectModal: this.state.showProjectModal, closeProjectModal: this.closeProjectModal, closeProjectModalOverlay: this.closeProjectModalOverlay,
+      pForm: this.state.pForm, setPFormName: this.setPFormName, setPFormTechs: this.setPFormTechs, setPFormCreated: this.setPFormCreated,
+      setPFormDeadline: this.setPFormDeadline, setPFormStatus: this.setPFormStatus, setPFormUpdate: this.setPFormUpdate, saveProject: this.saveProject,
+      hasConfetti: this.state.confetti.length > 0, confetti: this.state.confetti,
+      toast: this.state.toast,
+    };
+  }
+}
+
+</script>
+</body>
+</html>
