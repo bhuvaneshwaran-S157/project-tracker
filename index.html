@@ -61,22 +61,41 @@
 
   <div style="max-width:1240px;margin:0 auto;padding:0 32px 120px;position:relative;z-index:1">
 
-    <section style="padding:48px 0 28px;animation:fadeInUp 0.5s ease both">
-      <div style="font-size:12px;font-weight:600;letter-spacing:0.12em;color:{{ T.accentText }};text-transform:uppercase;margin-bottom:10px">{{ greeting }}</div>
-      <h1 style="font-family:'Poppins',sans-serif;font-size:clamp(28px,4vw,44px);font-weight:700;line-height:1.1;margin:0 0 12px;background:{{ T.gradient }};-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent">Build Something Every Day.</h1>
-      <p style="font-size:15px;color:{{ T.textSecondary }};max-width:560px;margin:0 0 22px;font-style:italic">"{{ quote }}"</p>
-      <div style="display:flex;gap:12px;flex-wrap:wrap;align-items:center">
-        <button onclick="{{ openNewLog }}" style="display:flex;align-items:center;gap:8px;padding:12px 22px;border-radius:12px;border:none;background:{{ T.gradient }};color:#fff;font-weight:600;font-size:14px;cursor:pointer;box-shadow:0 8px 24px rgba(108,99,255,0.35)" style-hover="transform:translateY(-2px);box-shadow:0 12px 32px rgba(108,99,255,0.45)">
-          <i data-lucide="plus" style="width:16px;height:16px"></i> Add Today's Log
-        </button>
-        <sc-if value="{{ hasStreak }}">
-          <div style="display:flex;align-items:center;gap:8px;padding:10px 16px;border-radius:12px;background:{{ T.cardBg }};border:1px solid {{ T.cardBorder }}">
-            <i data-lucide="flame" style="width:16px;height:16px;color:{{ T.warning }}"></i>
-            <span style="font-size:13px;font-weight:600">{{ stats.streak }} day streak</span>
-          </div>
-        </sc-if>
+<section style="padding:48px 0 28px;animation:fadeInUp 0.5s ease both">
+  <div style="font-size:12px;font-weight:600;letter-spacing:0.12em;color:{{ T.accentText }};text-transform:uppercase;margin-bottom:10px">
+    {{ greeting }}
+  </div>
+
+  <h1 style="font-family:'Poppins',sans-serif;font-size:clamp(28px,4vw,44px);font-weight:700;line-height:1.1;margin:0 0 12px;color:white">
+    Build Something Every Day.
+  </h1>
+
+  <p style="font-size:15px;color:{{ T.textSecondary }};max-width:560px;margin:0 0 22px;font-style:italic">
+    "{{ quote }}"
+  </p>
+
+  <div style="display:flex;gap:12px;flex-wrap:wrap;align-items:center">
+
+    <button 
+      onclick="{{ openNewLog }}" 
+      style="display:flex;align-items:center;gap:8px;padding:12px 22px;border-radius:12px;border:none;background:{{ T.gradient }};color:#fff;font-weight:600;font-size:14px;cursor:pointer;box-shadow:0 8px 24px rgba(108,99,255,0.35);transition:0.2s"
+      style-hover="transform:translateY(-2px);box-shadow:0 12px 32px rgba(108,99,255,0.45)">
+      
+      <i data-lucide="plus" style="width:16px;height:16px"></i>
+      Add Today's Log
+    </button>
+
+    <sc-if value="{{ hasStreak }}">
+      <div style="display:flex;align-items:center;gap:8px;padding:10px16px;border-radius:12px;background:{{ T.cardBg }};border:1px solid {{ T.cardBorder }}">
+        <i data-lucide="flame" style="width:16px;height:16px;color:{{ T.warning }}"></i>
+        <span style="font-size:13px;font-weight:600">
+          {{ stats.streak }} day streak
+        </span>
       </div>
-    </section>
+    </sc-if>
+
+  </div>
+</section>
 
     <section style="display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:14px;margin-bottom:40px">
       <sc-for list="{{ statCards }}" as="card" hint-placeholder-count="5">
